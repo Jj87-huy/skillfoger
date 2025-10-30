@@ -4,6 +4,8 @@
   "description": "Express server lưu user vào file JSON, tương thích Vietnix",
   "main": "server.js",
   "scripts": {
+    "build": "babel src -d lib",
+    "test": "jest"
     "start": "node server.js"
   },
   "dependencies": {
