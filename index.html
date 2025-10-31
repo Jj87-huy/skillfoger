@@ -1,0 +1,1515 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillForge</title>
+    <style>
+      {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        height: 100%;
+        background: #f5f5f5;
+        color: #333;
+        overflow: hidden;
+        box-sizing: border-box;
+      }
+
+      html {
+        height: 100%;
+      }
+
+      .app-container {
+        display: flex;
+        height: 100%;
+        position: relative;
+      }
+
+      /* Sidebar Menu */
+      .sidebar {
+        width: 320px;
+        background: #ffffff;
+        border-right: 1px solid #e0e0e0;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        z-index: 10;
+      }
+
+      .sidebar.dark {
+        background: #1e1e1e;
+        border-right-color: #333;
+      }
+
+      /* Header với tìm kiếm */
+      .sidebar-header {
+        padding: 16px;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .sidebar.dark .sidebar-header {
+        border-bottom-color: #333;
+      }
+
+      .app-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #007AFF;
+        margin-bottom: 16px;
+        text-align: center;
+      }
+
+      .sidebar.dark .app-title {
+        color: #0A84FF;
+      }
+
+      .search-container {
+        position: relative;
+      }
+
+      .search-input {
+        width: 100%;
+        padding: 12px 16px 12px 40px;
+        border: 1px solid #e0e0e0;
+        border-radius: 20px;
+        font-size: 14px;
+        background: #f8f9fa;
+        color: #333;
+      }
+
+      .sidebar.dark .search-input {
+        background: #2c2c2e;
+        border-color: #444;
+        color: #fff;
+      }
+
+      .search-icon {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #8e8e93;
+        font-size: 16px;
+      }
+
+      /* Menu Navigation */
+      .menu-nav {
+        padding: 16px;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .sidebar.dark .menu-nav {
+        border-bottom-color: #333;
+      }
+
+      .nav-item {
+        display: flex;
+        align-items: center;
+        padding: 12px 16px;
+        margin: 4px 0;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: background 0.2s;
+        font-size: 15px;
+        color: #333;
+      }
+
+      .sidebar.dark .nav-item {
+        color: #fff;
+      }
+
+      .nav-item:hover {
+        background: #f0f0f0;
+      }
+
+      .sidebar.dark .nav-item:hover {
+        background: #2c2c2e;
+      }
+
+      .nav-item.active {
+        background: #007AFF;
+        color: white;
+      }
+
+      .nav-item .icon {
+        margin-right: 12px;
+        font-size: 18px;
+        width: 20px;
+      }
+
+      /* Chat History */
+      .chat-history {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0 16px;
+      }
+
+      .history-section {
+        margin-bottom: 24px;
+      }
+
+      .history-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: #8e8e93;
+        margin-bottom: 8px;
+        padding: 0 16px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .history-item {
+        display: flex;
+        align-items: center;
+        padding: 12px 16px;
+        margin: 2px 0;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .history-item:hover {
+        background: #f0f0f0;
+      }
+
+      .sidebar.dark .history-item:hover {
+        background: #2c2c2e;
+      }
+
+      .history-item.active {
+        background: #e3f2fd;
+      }
+
+      .sidebar.dark .history-item.active {
+        background: #1a365d;
+      }
+
+      .history-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        font-size: 14px;
+        margin-right: 12px;
+      }
+
+      .history-content {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .history-name {
+        font-size: 15px;
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 2px;
+      }
+
+      .sidebar.dark .history-name {
+        color: #fff;
+      }
+
+      .history-preview {
+        font-size: 13px;
+        color: #8e8e93;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .history-time {
+        font-size: 12px;
+        color: #8e8e93;
+        margin-left: 8px;
+      }
+
+      /* User Profile */
+      .user-profile {
+        padding: 16px;
+        border-top: 1px solid #e0e0e0;
+        background: #ffffff;
+      }
+
+      .sidebar.dark .user-profile {
+        border-top-color: #333;
+        background: #1e1e1e;
+      }
+
+      .profile-card {
+        display: flex;
+        align-items: center;
+        padding: 12px 16px;
+        border-radius: 16px;
+        cursor: pointer;
+        transition: background 0.2s;
+        background: #f8f9fa;
+      }
+
+      .sidebar.dark .profile-card {
+        background: #2c2c2e;
+      }
+
+      .profile-card:hover {
+        background: #e9ecef;
+      }
+
+      .sidebar.dark .profile-card:hover {
+        background: #3a3a3c;
+      }
+
+      .profile-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #007AFF 0%, #5856D6 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        font-size: 16px;
+        margin-right: 12px;
+      }
+
+      .profile-info {
+        flex: 1;
+      }
+
+      .profile-name {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 2px;
+      }
+
+      .sidebar.dark .profile-name {
+        color: #fff;
+      }
+
+      .profile-status {
+        font-size: 13px;
+        color: #34c759;
+        font-weight: 500;
+      }
+
+      .profile-arrow {
+        color: #8e8e93;
+        font-size: 16px;
+      }
+
+      /* Main Chat Area */
+      .chat-area {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        background: #ffffff;
+        position: relative;
+      }
+
+      .chat-area.dark {
+        background: #1c1c1e;
+        border-bottom-color: #333;
+        color: #fff;
+      }
+
+      .chat-area.dark {
+        background: #2c2c2e;
+        color: #0A84FF;
+      }
+
+      .chat-area.dark {
+        background: #3a3a3c;
+      }
+
+      /* Messages Container */
+      .messages-container {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+
+      .chat-area.dark .messages-container {
+        background: #000000;
+      }
+
+      .message-group {
+        margin-bottom: 16px;
+      }
+
+      .message {
+        max-width: 70%;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: flex-end;
+      }
+
+      .message.sent {
+        margin-left: auto;
+        flex-direction: row-reverse;
+      }
+
+      .message.received {
+        margin-right: auto;
+      }
+
+      .message-bubble {
+        padding: 12px 16px;
+        border-radius: 20px;
+        font-size: 16px;
+        line-height: 1.4;
+        position: relative;
+        word-wrap: break-word;
+      }
+
+      .message.sent .message-bubble {
+        background: #007AFF;
+        color: white;
+        border-bottom-right-radius: 6px;
+      }
+
+      .message.received .message-bubble {
+        background: #e9ecef;
+        color: #333;
+        border-bottom-left-radius: 6px;
+      }
+
+      .chat-area.dark .message.received .message-bubble {
+        background: #2c2c2e;
+        color: #fff;
+      }
+
+      .message-time {
+        font-size: 11px;
+        color: #8e8e93;
+        margin: 4px 12px 0;
+        text-align: center;
+      }
+
+      .message.sent .message-time {
+        text-align: right;
+      }
+
+      .message.received .message-time {
+        text-align: left;
+      }
+
+      /* Welcome Screen */
+      .welcome-screen {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        text-align: center;
+        padding: 40px;
+      }
+
+      .welcome-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #007AFF 0%, #5856D6 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 36px;
+        margin-bottom: 24px;
+      }
+
+      .welcome-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 12px;
+      }
+
+      .chat-area.dark .welcome-title {
+        color: #fff;
+      }
+
+      .welcome-subtitle {
+        font-size: 16px;
+        color: #8e8e93;
+        margin-bottom: 32px;
+      }
+
+      .chat-area.dark {
+        background: #1c1c1e;
+        border-color: #333;
+      }
+
+      .chat-area.dark .quick-action h4 {
+        color: #fff;
+      }
+
+      /* Chat Input */
+      .chat-input-container {
+        padding: 16px 20px 20px;
+        background: #ffffff;
+        border-top: 1px solid #e0e0e0;
+      }
+
+      .chat-area.dark .chat-input-container {
+        background: #1c1c1e;
+        border-top-color: #333;
+      }
+
+      .input-wrapper {
+        display: flex;
+        align-items: flex-end;
+        gap: 12px;
+        max-width: 100%;
+      }
+
+      .input-container {
+        flex: 1;
+        position: relative;
+      }
+
+      .chat-input {
+        width: 100%;
+        min-height: 44px;
+        max-height: 120px;
+        padding: 12px 48px 12px 16px;
+        border: 1px solid #e0e0e0;
+        border-radius: 22px;
+        font-size: 16px;
+        line-height: 1.4;
+        resize: none;
+        background: #f8f9fa;
+        color: #333;
+        font-family: inherit;
+      }
+
+      .chat-area.dark .chat-input {
+        background: #2c2c2e;
+        border-color: #444;
+        color: #fff;
+      }
+
+      .chat-input:focus {
+        outline: none;
+        border-color: #007AFF;
+      }
+
+      .chat-input::placeholder {
+        color: #8e8e93;
+      }
+
+      .attach-btn {
+        position: absolute;
+        right: 8px;
+        bottom: 8px;
+        width: 32px;
+        height: 32px;
+        border: none;
+        border-radius: 50%;
+        background: transparent;
+        color: #007AFF;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+      }
+
+      .send-btn {
+        width: 44px;
+        height: 44px;
+        border: none;
+        border-radius: 50%;
+        background: #007AFF;
+        color: white;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        transition: background 0.2s;
+      }
+
+      .send-btn:hover:not(:disabled) {
+        background: #0056b3;
+      }
+
+      .send-btn:disabled {
+        background: #8e8e93;
+        cursor: not-allowed;
+      }
+
+      /* Settings Modal */
+      .settings-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .settings-modal.show {
+        display: flex;
+      }
+
+      .settings-content {
+        width: 90%;
+        max-width: 500px;
+        max-height: 90%;
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+      }
+
+      .settings-content.dark {
+        background: #1c1c1e;
+      }
+
+      .settings-header {
+        padding: 20px;
+        border-bottom: 1px solid #e0e0e0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .settings-content.dark .settings-header {
+        border-bottom-color: #333;
+      }
+
+      .settings-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #333;
+      }
+
+      .settings-content.dark .settings-title {
+        color: #fff;
+      }
+
+      .close-btn {
+        width: 32px;
+        height: 32px;
+        border: none;
+        border-radius: 50%;
+        background: #f0f0f0;
+        color: #333;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+      }
+
+      .settings-content.dark .close-btn {
+        background: #2c2c2e;
+        color: #fff;
+      }
+
+      .settings-body {
+        padding: 20px;
+        max-height: 60vh;
+        overflow-y: auto;
+      }
+
+      .settings-section {
+        margin-bottom: 32px;
+      }
+
+      .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 16px;
+      }
+
+      .settings-content.dark .section-title {
+        color: #fff;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-label {
+        display: block;
+        font-size: 14px;
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 8px;
+      }
+
+      .settings-content.dark .form-label {
+        color: #fff;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        font-size: 16px;
+        background: #f8f9fa;
+        color: #333;
+      }
+
+      .settings-content.dark .form-input {
+        background: #2c2c2e;
+        border-color: #444;
+        color: #fff;
+      }
+
+      .avatar-upload {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+
+      .avatar-preview {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #007AFF 0%, #5856D6 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        font-size: 24px;
+      }
+
+      .upload-btn {
+        padding: 8px 16px;
+        border: 1px solid #007AFF;
+        border-radius: 8px;
+        background: transparent;
+        color: #007AFF;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .upload-btn:hover {
+        background: #007AFF;
+        color: white;
+      }
+
+      .theme-options {
+        display: flex;
+        gap: 16px;
+      }
+
+      .theme-option {
+        flex: 1;
+        padding: 16px;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.2s;
+        background: white;
+      }
+
+      .settings-content.dark .theme-option {
+        background: #2c2c2e;
+        border-color: #444;
+      }
+
+      .theme-option.active {
+        border-color: #007AFF;
+        background: #f0f8ff;
+      }
+
+      .settings-content.dark .theme-option.active {
+        background: #1a365d;
+      }
+
+      .theme-icon {
+        font-size: 24px;
+        margin-bottom: 8px;
+      }
+
+      .theme-name {
+        font-size: 14px;
+        font-weight: 500;
+        color: #333;
+      }
+
+      .settings-content.dark .theme-name {
+        color: #fff;
+      }
+
+      .social-links {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .social-link {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 16px;
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        background: #f8f9fa;
+      }
+
+      .settings-content.dark .social-link {
+        background: #2c2c2e;
+        border-color: #444;
+      }
+
+      .social-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .social-icon {
+        font-size: 20px;
+      }
+
+      .social-text {
+        font-size: 15px;
+        color: #333;
+      }
+
+      .settings-content.dark .social-text {
+        color: #fff;
+      }
+
+      .connect-btn {
+        padding: 6px 12px;
+        border: 1px solid #007AFF;
+        border-radius: 6px;
+        background: transparent;
+        color: #007AFF;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 500;
+      }
+
+      .connect-btn.connected {
+        background: #34c759;
+        border-color: #34c759;
+        color: white;
+      }
+
+      .pro-card {
+        padding: 20px;
+        background: linear-gradient(135deg, #007AFF 0%, #5856D6 100%);
+        border-radius: 16px;
+        color: white;
+        text-align: center;
+      }
+
+      .pro-title {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      .pro-description {
+        font-size: 14px;
+        opacity: 0.9;
+        margin-bottom: 16px;
+      }
+
+      .pro-btn {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        background: white;
+        color: #007AFF;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      /* Toast */
+      .toast {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 12px 20px;
+        background: #333;
+        color: white;
+        border-radius: 8px;
+        font-size: 14px;
+        z-index: 2000;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      .toast.show {
+        opacity: 1;
+      }
+
+      /* Mobile Responsive */
+      @media (max-width: 768px) {
+        .sidebar {
+          position: fixed;
+          left: -320px;
+          height: 100%;
+          z-index: 100;
+          transition: left 0.3s ease;
+        }
+
+        .sidebar.open {
+          left: 0;
+        }
+
+        .chat-area {
+          width: 100%;
+        }
+
+        .overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
+          z-index: 99;
+          display: none;
+        }
+
+        .overlay.show {
+          display: block;
+        }
+
+        .mobile-header {
+          display: flex;
+          align-items: center;
+          padding: 12px 16px;
+          background: #ffffff;
+          border-bottom: 1px solid #e0e0e0;
+        }
+
+        .chat-area.dark .mobile-header {
+          background: #1c1c1e;
+          border-bottom-color: #333;
+        }
+
+        .menu-btn {
+          width: 40px;
+          height: 40px;
+          border: none;
+          border-radius: 8px;
+          background: transparent;
+          color: #007AFF;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 20px;
+          margin-right: 12px;
+        }
+
+        .mobile-title {
+          font-size: 18px;
+          font-weight: 600;
+          color: #333;
+        }
+
+        .chat-area.dark .mobile-title {
+          color: #fff;
+        }
+      }
+    </style>
+    <style>
+      @view-transition {
+        navigation: auto;
+      }
+    </style>
+    <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- Sidebar Menu -->
+      <div class="sidebar" id="sidebar">
+        <!-- Header với tìm kiếm -->
+        <div class="sidebar-header">
+          <h1 class="app-title" id="appTitle">Chat Bot Pro</h1>
+          <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" placeholder="Tìm kiếm cuộc trò chuyện..." id="searchInput">
+          </div>
+        </div>
+        <!-- Menu Navigation -->
+        <div class="menu-nav">
+          <div class="nav-item active" data-tab="chats">
+            <span class="icon">💬</span>
+            <span>Tin nhắn</span>
+          </div>
+          <div class="nav-item" data-tab="highlights">
+            <span class="icon">⭐</span>
+            <span>Nổi bật</span>
+          </div>
+          <div class="nav-item" data-tab="history">
+            <span class="icon">📚</span>
+            <span>Lịch sử</span>
+          </div>
+        </div>
+        <!-- Chat History -->
+        <div class="chat-history" id="chatHistory">
+          <div class="history-section">
+            <div class="history-title"> Hôm nay </div>
+            <div class="history-item active">
+              <div class="history-avatar"> AI </div>
+              <div class="history-content">
+                <div class="history-name" id="botName"> AI Assistant </div>
+                <div class="history-preview"> Xin chào! Tôi có thể giúp gì cho bạn? </div>
+              </div>
+              <div class="history-time"> 10:30 </div>
+            </div>
+            <div class="history-item">
+              <div class="history-avatar"> 🤖 </div>
+              <div class="history-content">
+                <div class="history-name"> Chat Bot </div>
+                <div class="history-preview"> Hướng dẫn sử dụng tính năng mới </div>
+              </div>
+              <div class="history-time"> 09:15 </div>
+            </div>
+          </div>
+          <div class="history-section">
+            <div class="history-title"> Hôm qua </div>
+            <div class="history-item">
+              <div class="history-avatar"> 📝 </div>
+              <div class="history-content">
+                <div class="history-name"> Trợ lý viết </div>
+                <div class="history-preview"> Giúp tôi viết email chuyên nghiệp </div>
+              </div>
+              <div class="history-time"> 14:22 </div>
+            </div>
+            <div class="history-item">
+              <div class="history-avatar"> 🎨 </div>
+              <div class="history-content">
+                <div class="history-name"> Thiết kế AI </div>
+                <div class="history-preview"> Tạo logo cho công ty </div>
+              </div>
+              <div class="history-time"> 11:45 </div>
+            </div>
+          </div>
+          <div class="history-section">
+            <div class="history-title"> Tuần trước </div>
+            <div class="history-item">
+              <div class="history-avatar"> 💡 </div>
+              <div class="history-content">
+                <div class="history-name"> Tư vấn AI </div>
+                <div class="history-preview"> Lập kế hoạch học tập </div>
+              </div>
+              <div class="history-time"> T2 </div>
+            </div>
+            <div class="history-item">
+              <div class="history-avatar"> 🔍 </div>
+              <div class="history-content">
+                <div class="history-name"> Tìm kiếm thông minh </div>
+                <div class="history-preview"> Nghiên cứu về AI </div>
+              </div>
+              <div class="history-time"> CN </div>
+            </div>
+          </div>
+        </div>
+        <!-- User Profile -->
+        <div class="user-profile">
+          <div class="profile-card" id="profileCard">
+            <div class="profile-avatar" id="profileAvatar"> N </div>
+            <div class="profile-info">
+              <div class="profile-name" id="profileName"> Nguyễn Văn A </div>
+              <div class="profile-status" id="profileStatus">● Đang hoạt động</div>
+            </div>
+            <div class="profile-arrow"> ⚙️ </div>
+          </div>
+        </div>
+      </div>
+      <!-- Main Chat Area -->
+      <div class="chat-area" id="chatArea">
+        <!-- Mobile Header -->
+        <div class="mobile-header" style="display: none;" id="mobileHeader">
+          <button class="menu-btn" id="menuBtn">☰</button>
+          <div class="mobile-title" id="mobileTitle">Chat Bot Pro</div>
+        </div>
+        <!-- Messages Container -->
+        <div class="messages-container" id="messagesContainer">
+          <!-- Welcome Screen -->
+          <div class="welcome-screen" id="welcomeScreen">
+            <div class="welcome-icon"> 🤖 </div>
+            <h2 class="welcome-title" id="welcomeTitle">Chào mừng đến với Chat Bot Pro</h2>
+            <p class="welcome-subtitle" id="welcomeMessage">Xin chào! Tôi có thể giúp gì cho bạn?</p>
+          </div>
+        </div>
+        <!-- Chat Input -->
+        <div class="chat-input-container">
+          <div class="input-wrapper">
+            <div class="input-container">
+              <textarea class="chat-input" id="chatInput" placeholder="Nhập tin nhắn..." rows="1"></textarea>
+            </div>
+            <button class="send-btn" id="sendBtn" disabled>➤</button>
+          </div>
+        </div>
+      </div>
+      <!-- Settings Modal -->
+      <div class="settings-modal" id="settingsModal">
+        <div class="settings-content" id="settingsContent">
+          <div class="settings-header">
+            <h2 class="settings-title">Cài đặt</h2>
+            <button class="close-btn" id="closeSettings">✕</button>
+          </div>
+          <div class="settings-body">
+            <!-- Profile Settings -->
+            <div class="settings-section">
+              <h3 class="section-title">Thông tin cá nhân</h3>
+              <div class="avatar-upload">
+                <div class="avatar-preview" id="avatarPreview"> N </div>
+                <button class="upload-btn" id="uploadAvatar">Thay đổi ảnh</button>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Tên hiển thị</label>
+                <input type="text" class="form-input" id="displayName" value="Nguyễn Văn A">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-input" id="email" value="user@example.com">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Số điện thoại</label>
+                <input type="tel" class="form-input" id="phone" value="+84 123 456 789">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Mật khẩu mới</label>
+                <input type="password" class="form-input" id="password" placeholder="Nhập mật khẩu mới">
+              </div>
+            </div>
+            <!-- Social Links -->
+            <div class="settings-section">
+              <h3 class="section-title">Tài khoản liên kết</h3>
+              <div class="social-links">
+                <div class="social-link">
+                  <div class="social-info">
+                    <span class="social-icon">🔵</span>
+                    <span class="social-text">Google</span>
+                  </div>
+                  <button class="connect-btn connected">Đã kết nối</button>
+                </div>
+                <div class="social-link">
+                  <div class="social-info">
+                    <span class="social-icon">🟣</span>
+                    <span class="social-text">Discord</span>
+                  </div>
+                  <button class="connect-btn">Kết nối</button>
+                </div>
+              </div>
+            </div>
+            <!-- Theme Settings -->
+            <div class="settings-section">
+              <h3 class="section-title">Giao diện</h3>
+              <div class="theme-options">
+                <div class="theme-option active" id="lightTheme">
+                  <div class="theme-icon"> ☀️ </div>
+                  <div class="theme-name"> Sáng </div>
+                </div>
+                <div class="theme-option" id="darkTheme">
+                  <div class="theme-icon"> 🌙 </div>
+                  <div class="theme-name"> Tối </div>
+                </div>
+              </div>
+            </div>
+            <!-- Pro Upgrade -->
+            <div class="settings-section">
+              <div class="pro-card">
+                <h3 class="pro-title" id="proTitle">⚡ Nâng cấp Pro</h3>
+                <p class="pro-description" id="proDescription"> Truy cập không giới hạn, AI thông minh hơn và nhiều tính năng độc quyền </p>
+                <button class="pro-btn" id="upgradeBtn">Nâng cấp ngay - 199k/tháng</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Overlay for mobile -->
+      <div class="overlay" id="overlay"></div>
+      <!-- Toast -->
+      <div class="toast" id="toast"></div>
+    </div>
+    <script>
+      const defaultConfig = {
+        app_title: "SkillForge",
+        bot_name: "AI Assistant",
+        welcome_message: "Xin chào! Tôi có thể giúp gì cho bạn?",
+        background_color: "#ffffff",
+        sidebar_color: "#ffffff",
+        primary_color: "#007AFF",
+        text_color: "#333333",
+        message_color: "#f5f5f5",
+        font_family: "system-ui",
+        font_size: 16
+      };
+      let currentTheme = 'light';
+      let isWelcomeScreen = true;
+      // =========================================================
+      // ⚙️ Cập nhật giao diện và nội dung theo cấu hình
+      // =========================================================
+      async function onConfigChange(config) {
+        const appTitle = config.app_title || defaultConfig.app_title;
+        const botName = config.bot_name || defaultConfig.bot_name;
+        const welcomeMessage = config.welcome_message || defaultConfig.welcome_message;
+        const backgroundColor = config.background_color || defaultConfig.background_color;
+        const sidebarColor = config.sidebar_color || defaultConfig.sidebar_color;
+        const primaryColor = config.primary_color || defaultConfig.primary_color;
+        const textColor = config.text_color || defaultConfig.text_color;
+        const messageColor = config.message_color || defaultConfig.message_color;
+        const fontFamily = config.font_family || defaultConfig.font_family;
+        const fontSize = config.font_size || defaultConfig.font_size;
+        // ========== CẬP NHẬT NỘI DUNG CƠ BẢN ==========
+        const el = (id) => document.getElementById(id);
+        if (el('appTitle')) el('appTitle').textContent = appTitle;
+        if (el('botName')) el('botName').textContent = botName;
+        if (el('chatBotName')) el('chatBotName').textContent = botName;
+        if (el('welcomeMessage')) el('welcomeMessage').textContent = welcomeMessage;
+        if (el('mobileTitle')) el('mobileTitle').textContent = appTitle;
+        // 🟢 PHẦN THÊM MỚI — cập nhật tất cả chỗ hiển thị liên quan
+        if (el('welcomeTitle')) el('welcomeTitle').textContent = `Chào mừng đến với ${appTitle}`;
+        if (el('proTitle')) el('proTitle').textContent = `⚡ Nâng cấp ${appTitle} Pro`;
+        if (el('proDescription')) el('proDescription').textContent = `Truy cập không giới hạn, ${botName} thông minh hơn và nhiều tính năng độc quyền`;
+        if (el('upgradeBtn')) el('upgradeBtn').textContent = `Nâng cấp ngay - ${appTitle} Pro`;
+        if (el('profileStatus')) el('profileStatus').textContent = '● Đang hoạt động';
+        // ========== CẬP NHẬT GIAO DIỆN ==========
+        const baseFontStack = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+        document.body.style.fontFamily = `${fontFamily}, ${baseFontStack}`;
+        document.body.style.fontSize = `${fontSize}px`;
+        const chatArea = document.querySelector('.chat-area');
+        if (chatArea) chatArea.style.background = backgroundColor;
+        const sidebar = document.querySelector('.sidebar');
+        if (sidebar) sidebar.style.background = sidebarColor;
+        const primaryElements = document.querySelectorAll('.send-btn, .nav-item.active, .app-title, .pro-card');
+        primaryElements.forEach(el => {
+          if (el.classList.contains('send-btn')) {
+            el.style.background = primaryColor;
+          } else if (el.classList.contains('nav-item') && el.classList.contains('active')) {
+            el.style.background = primaryColor;
+          } else if (el.classList.contains('app-title')) {
+            el.style.color = primaryColor;
+          } else if (el.classList.contains('pro-card')) {
+            el.style.background = `linear-gradient(135deg, ${primaryColor} 0%, #5856D6 100%)`;
+          }
+        });
+        document.querySelectorAll('.welcome-title, .section-title, .profile-name').forEach(el => {
+          el.style.color = textColor;
+        });
+        const msgContainer = document.querySelector('.messages-container');
+        if (msgContainer) msgContainer.style.background = messageColor;
+      }
+      // =========================================================
+      // 🔧 Khai báo cấu hình cho SDK
+      // =========================================================
+      function mapToCapabilities(config) {
+        return {
+          recolorables: [{
+            get: () => config.background_color || defaultConfig.background_color,
+            set: (value) => {
+              if (window.elementSdk) {
+                window.elementSdk.config.background_color = value;
+                window.elementSdk.setConfig({
+                  background_color: value
+                });
+              }
+            }
+          }, {
+            get: () => config.sidebar_color || defaultConfig.sidebar_color,
+            set: (value) => {
+              if (window.elementSdk) {
+                window.elementSdk.config.sidebar_color = value;
+                window.elementSdk.setConfig({
+                  sidebar_color: value
+                });
+              }
+            }
+          }, {
+            get: () => config.primary_color || defaultConfig.primary_color,
+            set: (value) => {
+              if (window.elementSdk) {
+                window.elementSdk.config.primary_color = value;
+                window.elementSdk.setConfig({
+                  primary_color: value
+                });
+              }
+            }
+          }, {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => {
+              if (window.elementSdk) {
+                window.elementSdk.config.text_color = value;
+                window.elementSdk.setConfig({
+                  text_color: value
+                });
+              }
+            }
+          }, {
+            get: () => config.message_color || defaultConfig.message_color,
+            set: (value) => {
+              if (window.elementSdk) {
+                window.elementSdk.config.message_color = value;
+                window.elementSdk.setConfig({
+                  message_color: value
+                });
+              }
+            }
+          }],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (value) => {
+              if (window.elementSdk) {
+                window.elementSdk.config.font_family = value;
+                window.elementSdk.setConfig({
+                  font_family: value
+                });
+              }
+            }
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (value) => {
+              if (window.elementSdk) {
+                window.elementSdk.config.font_size = value;
+                window.elementSdk.setConfig({
+                  font_size: value
+                });
+              }
+            }
+          }
+        };
+      }
+
+      function mapToEditPanelValues(config) {
+        return new Map([
+          ["app_title", config.app_title || defaultConfig.app_title],
+          ["bot_name", config.bot_name || defaultConfig.bot_name],
+          ["welcome_message", config.welcome_message || defaultConfig.welcome_message]
+        ]);
+      }
+      if (window.elementSdk) {
+        window.elementSdk.init({
+          defaultConfig,
+          onConfigChange,
+          mapToCapabilities,
+          mapToEditPanelValues
+        });
+      }
+      // =========================================================
+      // 🧠 DOM Elements
+      // =========================================================
+      const profileCard = document.getElementById('profileCard');
+      const settingsModal = document.getElementById('settingsModal');
+      const closeSettings = document.getElementById('closeSettings');
+      const chatInput = document.getElementById('chatInput');
+      const sendBtn = document.getElementById('sendBtn');
+      const messagesContainer = document.getElementById('messagesContainer');
+      const welcomeScreen = document.getElementById('welcomeScreen');
+      const lightTheme = document.getElementById('lightTheme');
+      const darkTheme = document.getElementById('darkTheme');
+      const upgradeBtn = document.getElementById('upgradeBtn');
+      const toast = document.getElementById('toast');
+      const menuBtn = document.getElementById('menuBtn');
+      const overlay = document.getElementById('overlay');
+      const sidebar = document.getElementById('sidebar');
+      // =========================================================
+      // 🎛️ Sự kiện giao diện
+      // =========================================================
+      profileCard.addEventListener('click', () => settingsModal.classList.add('show'));
+      closeSettings.addEventListener('click', () => settingsModal.classList.remove('show'));
+      settingsModal.addEventListener('click', (e) => {
+        if (e.target === settingsModal) settingsModal.classList.remove('show');
+      });
+      chatInput.addEventListener('input', () => {
+        chatInput.style.height = 'auto';
+        chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
+        sendBtn.disabled = !chatInput.value.trim();
+      });
+      chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          sendMessage();
+        }
+      });
+      sendBtn.addEventListener('click', sendMessage);
+      // =========================================================
+      // 💬 Quick actions
+      // =========================================================
+      document.querySelectorAll('.quick-action').forEach(action => {
+        action.addEventListener('click', () => {
+          const actionText = action.getAttribute('data-action');
+          chatInput.value = actionText;
+          sendMessage();
+        });
+      });
+      // =========================================================
+      // 📱 Mobile Menu
+      // =========================================================
+      if (window.innerWidth <= 768) {
+        document.getElementById('mobileHeader').style.display = 'flex';
+        menuBtn.addEventListener('click', () => {
+          sidebar.classList.toggle('open');
+          overlay.classList.toggle('show');
+        });
+        overlay.addEventListener('click', () => {
+          sidebar.classList.remove('open');
+          overlay.classList.remove('show');
+        });
+      }
+      // =========================================================
+      // ✉️ Gửi tin nhắn
+      // =========================================================
+      function sendMessage() {
+        const message = chatInput.value.trim();
+        if (!message) return;
+        if (isWelcomeScreen) {
+          welcomeScreen.style.display = 'none';
+          isWelcomeScreen = false;
+        }
+        const userMessage = document.createElement('div');
+        userMessage.className = 'message-group';
+        userMessage.innerHTML = `
+    
+					<div class="message sent">
+						<div class="message-bubble">${message}</div>
+					</div>
+					<div class="message-time">${new Date().toLocaleTimeString('vi-VN', {hour: '2-digit', minute: '2-digit'})}</div>
+  `;
+        messagesContainer.appendChild(userMessage);
+        chatInput.value = '';
+        chatInput.style.height = 'auto';
+        sendBtn.disabled = true;
+        setTimeout(() => {
+          const botMessage = document.createElement('div');
+          botMessage.className = 'message-group';
+          botMessage.innerHTML = `
+      
+					<div class="message received">
+						<div class="message-bubble">Cảm ơn bạn đã nhắn tin! Tôi hiểu bạn muốn biết về "${message}". Đây là một chủ đề thú vị và tôi sẽ cố gắng giải thích một cách chi tiết nhất có thể.</div>
+					</div>
+					<div class="message-time">${new Date().toLocaleTimeString('vi-VN', {hour: '2-digit', minute: '2-digit'})}</div>
+    `;
+          messagesContainer.appendChild(botMessage);
+          messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }, 1000);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+      // =========================================================
+      // 🎨 Giao diện Sáng / Tối
+      // =========================================================
+      lightTheme.addEventListener('click', () => {
+        currentTheme = 'light';
+        lightTheme.classList.add('active');
+        darkTheme.classList.remove('active');
+        document.getElementById('sidebar').classList.remove('dark');
+        document.getElementById('chatArea').classList.remove('dark');
+        document.getElementById('settingsContent').classList.remove('dark');
+        showToast('Đã chuyển sang giao diện sáng');
+      });
+      darkTheme.addEventListener('click', () => {
+        currentTheme = 'dark';
+        darkTheme.classList.add('active');
+        lightTheme.classList.remove('active');
+        document.getElementById('sidebar').classList.add('dark');
+        document.getElementById('chatArea').classList.add('dark');
+        document.getElementById('settingsContent').classList.add('dark');
+        showToast('Đã chuyển sang giao diện tối');
+      });
+      upgradeBtn.addEventListener('click', () => showToast('Tính năng nâng cấp Pro đang được phát triển!'));
+      // =========================================================
+      // 🧭 Navigation Tabs
+      // =========================================================
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', () => {
+          document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+          item.classList.add('active');
+          const tab = item.getAttribute('data-tab');
+          showToast(`Đã chuyển sang tab ${tab === 'chats' ? 'Tin nhắn' : tab === 'highlights' ? 'Nổi bật' : 'Lịch sử'}`);
+        });
+      });
+      // =========================================================
+      // 🕒 History Items
+      // =========================================================
+      document.querySelectorAll('.history-item').forEach(item => {
+        item.addEventListener('click', () => {
+          document.querySelectorAll('.history-item').forEach(h => h.classList.remove('active'));
+          item.classList.add('active');
+          if (isWelcomeScreen) {
+            welcomeScreen.style.display = 'none';
+            isWelcomeScreen = false;
+          }
+          const chatName = item.querySelector('.history-name').textContent;
+          const preview = item.querySelector('.history-preview').textContent;
+          messagesContainer.innerHTML = `
+      
+					<div class="message-group">
+						<div class="message received">
+							<div class="message-bubble">Xin chào! Đây là cuộc trò chuyện với ${chatName}. ${preview}</div>
+						</div>
+						<div class="message-time">${new Date().toLocaleTimeString('vi-VN', {hour: '2-digit', minute: '2-digit'})}</div>
+					</div>
+    `;
+        });
+      });
+      // =========================================================
+      // 🔗 Social connect buttons
+      // =========================================================
+      document.querySelectorAll('.connect-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (!btn.classList.contains('connected')) {
+            btn.classList.add('connected');
+            btn.textContent = 'Đã kết nối';
+            showToast('Đã kết nối tài khoản thành công!');
+          }
+        });
+      });
+      // =========================================================
+      // 🔔 Thông báo nhanh (Toast)
+      // =========================================================
+      function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+        }, 3000);
+      }
+      // =========================================================
+      // 🔍 Tìm kiếm lịch sử
+      // =========================================================
+      document.getElementById('searchInput').addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const historyItems = document.querySelectorAll('.history-item');
+        historyItems.forEach(item => {
+          const name = item.querySelector('.history-name').textContent.toLowerCase();
+          const preview = item.querySelector('.history-preview').textContent.toLowerCase();
+          item.style.display = (name.includes(searchTerm) || preview.includes(searchTerm)) ? 'flex' : 'none';
+        });
+      });
+      // =========================================================
+      // 🖼️ Upload Avatar & Attach File
+      // =========================================================
+      document.getElementById('uploadAvatar').addEventListener('click', () => showToast('Tính năng tải ảnh đang được phát triển!'));
+      document.getElementById('attachBtn').addEventListener('click', () => showToast('Tính năng đính kèm file đang được phát triển!'));
+    </script>
+  </body>
+</html>
