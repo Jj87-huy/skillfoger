@@ -4,6 +4,7 @@ const fs = require("fs");
 const fsp = require("fs").promises;
 const path = require("path");
 const bodyParser = require("body-parser");
+const fetch = require ("node-fetch");
 
 const app = express();
 const USER_DIR = path.join(__dirname, "user");
@@ -20,6 +21,50 @@ fsp.mkdir(USER_DIR, { recursive: true })
 // ==============================
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
+
+
+
+let cachedHtml = "";
+let lastFetched = 0;
+const CACHE_DURATION = 60 * 1000; // 1 phút
+
+app.get("/get/html", async (req, res) => {
+  const now = Date.now();
+
+  // Nếu cache còn hiệu lực, trả HTML cached
+  if (cachedHtml && now - lastFetched < CACHE_DURATION) {
+    return res.send(cachedHtml);
+  }
+
+  try {
+    const githubUrl = "https://raw.githubusercontent.com/user/repo/main/index.html";
+    const response = await fetch(githubUrl);
+    let html = await response.text();
+
+    // ==== Chỉnh sửa HTML trước khi gửi client ====
+    html = html.replace(
+      "<h1>Xin chào!</h1>",
+      "<h1>Chào mừng bạn đến trang đã chỉnh sửa!</h1>"
+    );
+
+    html = html.replace(
+      "<p>Nội dung gốc từ GitHub.</p>",
+      "<p>Nội dung này đã được server sửa trước khi gửi client.</p>"
+    );
+    // ============================================
+
+    // Cache HTML
+    cachedHtml = html;
+    lastFetched = now;
+
+    // Cho phép client từ domain khác fetch
+    res.set("Access-Control-Allow-Origin", "*");
+    res.send(html);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Lỗi fetch HTML từ GitHub");
+  }
+});
 
 // ==============================
 // 🧩 Route gốc — It works! (chuẩn Vietnix)
