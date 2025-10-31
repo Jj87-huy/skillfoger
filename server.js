@@ -39,7 +39,7 @@ app.get("/get/html", async (req, res) => {
   }
 
   try {
-    const githubUrl = "https://raw.githubusercontent.com/Jj87-huy/skillfoger/refs/heads/main/index.html";
+    const githubUrl = "https://raw.githubusercontent.com/Jj87-huy/skillfoger/main/index.html";
     const response = await fetch(githubUrl);
     let html = await response.text();
 
