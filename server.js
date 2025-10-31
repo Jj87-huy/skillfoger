@@ -13,8 +13,8 @@ const USER_DIR = path.join(__dirname, "user");
 // 📁 Tạo thư mục user nếu chưa có
 // ==============================
 fsp.mkdir(USER_DIR, { recursive: true })
-  .then(() => console.log("📂 Đã kiểm tra/thêm thư mục user"))
-  .catch(err => console.error("❌ Không thể tạo thư mục user:", err));
+  .then(() => console.log("📂 Đã kiểm tra"))
+  .catch(err => console.error("❌ Không thể tạo ", err));
 
 // ==============================
 // ⚙️ Middleware
@@ -153,5 +153,5 @@ app.get("/api/user/:id", async (req, res) => {
 // ==============================
 const server = http.createServer(app);
 server.listen(() => {
-  console.log("✅ Server Node (Express) đã chạy qua http.createServer() như Vietnix");
+  console.log("✅ Server Node (Express)đã chạy");
 });
