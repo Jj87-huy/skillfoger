@@ -9,6 +9,8 @@ const fetch = require ("node-fetch");
 const app = express();
 const USER_DIR = path.join(__dirname, "user");
 
+const port = process.env.PORT || 4000
+
 // ==============================
 // 📁 Tạo thư mục user nếu chưa có
 // ==============================
@@ -152,6 +154,6 @@ app.get("/api/user/:id", async (req, res) => {
 // 🚀 Tạo HTTP Server (chuẩn Vietnix)
 // ==============================
 const server = http.createServer(app);
-server.listen(() => {
+server.listen(port, () => {
   console.log("✅ Server Node (Express)đã chạy");
 });
